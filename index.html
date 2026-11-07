@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Tracker for small landlords</title>
+<meta name="description" content="Repairs, complaints and damp-and-mould deadlines, tracked for you. A free 60-day pilot for social landlords with fewer than 1,000 homes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;700&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<!--
+  Design read: B2B service page for housing managers at small social landlords, in the Case Tracker
+  "Notice board" language (estate copper preset). Dials: ENERGY 2 / RHYTHM 3 / MOTION 1.
+  Theme: light only. Reason: the Notice board look is a warm paper ground with copper and ink, drawn and
+  contrast-checked for one theme; a half-tested dark mode would be worse than none (R-21).
+  Fonts (SIL OFL 1.1, Google Fonts): Atkinson Hyperlegible Next and Mono.
+  Images: img/ holds real screens from the Case Tracker demo; every one is labelled with the setup it comes from.
+-->
+<style>
+:root {
+  color-scheme: light;
+  --ink: #1A1F24; --muted: #4D545C; --ground: #F5F3EF; --surface: #FFFFFF;
+  --rule: #D9D5CC; --control: #676D74; --signal: #F2C12E; --link: #0F4C81;
+  --good: #1B6B38; --good-tint: #E5F2E8; --warn: #7A4A00; --warn-tint: #FFF1CE;
+  --brand: #9A4510; --brand-deep: #6F3009; --brand-mid: #B8632B; --brand-tint: #F9E7D9; --brand-soft: #FBE3D0;
+  --font: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --radius: 4px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 18px/1.5 var(--font); }
+h1, h2, h3, p, ul, ol, dl, dd, figure, table { margin: 0; }
+h1 { font-size: clamp(34px, 8.6vw, 52px); line-height: 1.08; font-weight: 700; letter-spacing: -0.015em; text-wrap: balance; }
+h2 { font-size: clamp(26px, 6vw, 36px); line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+h3 { font-size: clamp(22px, 5vw, 28px); line-height: 1.2; font-weight: 700; text-wrap: balance; }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a, button, summary { cursor: pointer; }
+::selection { background: var(--signal); color: var(--ink); }
+img { display: block; max-width: 100%; height: auto; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 6px var(--signal); }
+.on-brand :focus-visible { outline-color: #fff; box-shadow: none; }
+.skip { position: absolute; left: var(--gutter); top: -80px; background: var(--surface); color: var(--ink); padding: var(--s3) var(--s4); z-index: 10; }
+.skip:focus { top: var(--s2); }
+.wrap { width: 100%; max-width: 1152px; margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter-r); }
+.muted { color: var(--muted); }
+.small { font-size: 16px; line-height: 1.45; }
+.nums { font-variant-numeric: tabular-nums; }
+
+/* single-column grids must not size to their widest child (the 1280px screenshots) */
+.hero-body, .hero-text, .shot, .proof, .p1-grid, .p1-stack, .setup-grid, .setup-intro, .offer-grid, .price, .incl, .proof-text, .screens-head { grid-template-columns: minmax(0, 1fr); }
+.hero-text > *, .shot > *, .incl > *, .ticks li > span { min-width: 0; }
+h1, h2, h3, p, li, td, th { overflow-wrap: break-word; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--s3); min-height: 52px; padding: var(--s3) var(--s5); font: 700 18px/1.2 var(--font); text-decoration: none; border-radius: var(--radius); border: 2px solid var(--ink); }
+.btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-deep); border-color: var(--brand-deep); }
+.btn-light { background: #fff; border-color: #fff; color: var(--ink); }
+.btn-light:hover { background: var(--brand-tint); border-color: var(--brand-tint); }
+.btn-line { background: transparent; border-color: #fff; color: #fff; }
+.btn-line:hover { background: rgba(255,255,255,.14); }
+.btn:active { transform: translateY(1px); }
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+
+/* ---------- brand band ---------- */
+.hero { background: var(--brand); color: #fff; position: relative; overflow: hidden; }
+.hero a { color: #fff; }
+.hero a.btn-light, .offer a.btn-light { color: var(--ink); }
+.hero-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--s6); position: relative; z-index: 2; border-bottom: 1px solid rgba(255,255,255,.38); }
+.mark { display: inline-flex; align-items: baseline; gap: var(--s2); padding: var(--s4) 0 var(--s3); color: #fff; text-decoration: none; font-weight: 700; font-size: 30px; letter-spacing: -0.02em; line-height: 1; min-height: 44px; }
+.mark small { font-size: 16px; font-weight: 400; font-style: italic; letter-spacing: 0; color: var(--brand-soft); }
+.nav { display: flex; gap: var(--s5); }
+.nav a { display: inline-flex; align-items: center; min-height: 48px; color: #fff; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.nav a:hover { border-bottom-color: #fff; }
+.hero-body { position: relative; z-index: 2; display: grid; gap: var(--s6); padding-top: var(--s6); padding-bottom: 112px; }
+.hero-text { display: grid; gap: var(--s4); align-content: start; }
+.hero h1 { color: #fff; }
+.lede { font-size: 20px; line-height: 1.45; max-width: 34rem; }
+.hero .lede { color: #fff; }
+.hero .honest { color: var(--brand-soft); font-size: 18px; max-width: 34rem; }
+.hero .btn-row { margin-top: var(--s2); }
+.shot { display: grid; gap: var(--s2); align-content: start; }
+.shot-frame { display: block; background: #fff; border: 1px solid #fff; }
+.shot figcaption { color: var(--brand-soft); font-size: 16px; line-height: 1.4; }
+.skyline { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 88px; display: block; z-index: 1; }
+
+/* ---------- screens ---------- */
+.screens { padding-top: var(--s8); }
+.screens-head { display: grid; gap: var(--s3); max-width: 44rem; margin-bottom: var(--s7); }
+.proof { display: grid; gap: var(--s5); padding-top: var(--s5); border-top: 2px solid var(--ink); margin-bottom: var(--s8); }
+.proof-text { display: grid; gap: var(--s3); align-content: start; max-width: 30rem; }
+@media (min-width: 960px) { .proof.p1 .proof-text { position: sticky; top: var(--s5); } }
+.proof-text .cap { font-size: 20px; line-height: 1.4; }
+.proof-text .src { font-size: 16px; color: var(--muted); }
+.fig { display: grid; gap: var(--s2); align-content: start; min-width: 0; }
+.fig img { border: 1px solid var(--control); background: #fff; }
+.fig figcaption { font-size: 16px; line-height: 1.4; color: var(--muted); }
+.fig figcaption b { color: var(--ink); font-weight: 700; }
+.p1-grid { display: grid; gap: var(--s5); min-width: 0; }
+.p1-stack { display: grid; gap: var(--s5); align-content: start; }
+.phones { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s5); align-items: start; min-width: 0; max-width: 420px; }
+@media (min-width: 560px) { .phones { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); max-width: none; } }
+.band-tint { background: var(--brand-tint); padding: var(--s7) 0 var(--s7); margin-bottom: var(--s8); }
+.band-tint .proof { margin-bottom: 0; border-top-color: var(--brand-deep); }
+.band-tint .fig img { border-color: var(--brand-deep); }
+.report-facts { display: grid; margin-top: var(--s2); border-top: 1px solid var(--rule); }
+.report-facts div { padding: var(--s2) 0; border-bottom: 1px solid var(--rule); font-size: 16px; }
+.report-facts dt { font-weight: 700; display: inline; }
+.report-facts dd { display: inline; color: var(--muted); }
+
+/* ---------- deadlines ---------- */
+.setup { padding-bottom: var(--s8); }
+.setup-grid { display: grid; gap: var(--s6); padding-top: var(--s5); border-top: 2px solid var(--ink); }
+.setup-intro { display: grid; gap: var(--s4); align-content: start; max-width: 32rem; }
+.notice { display: flex; gap: var(--s3); align-items: flex-start; background: var(--surface); border: 2px solid var(--ink); padding: var(--s4); font-size: 16px; line-height: 1.45; }
+.notice svg { width: 24px; height: 24px; flex: none; margin-top: 1px; }
+.notice strong { display: block; font-size: 18px; }
+.dl { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--control); }
+.dl caption { text-align: left; padding: var(--s3) var(--s4); font-weight: 700; background: var(--surface); border-bottom: 2px solid var(--ink); }
+.dl th, .dl td { text-align: left; vertical-align: top; padding: var(--s4); border-bottom: 1px solid var(--rule); }
+.dl thead { display: none; }
+.dl tr { display: grid; gap: var(--s2); padding: var(--s1) 0; border-bottom: 1px solid var(--rule); }
+.dl tbody th, .dl td { border-bottom: 0; padding: var(--s2) var(--s4); }
+.dl tbody th { font-size: 20px; }
+.dl td[data-label]::before { content: attr(data-label); display: block; font-size: 14px; color: var(--muted); }
+.dl .dd { font-weight: 700; font-size: 20px; line-height: 1.3; }
+.dl .dd span { display: block; font-weight: 400; font-size: 16px; color: var(--muted); }
+.dl .where { font-size: 16px; }
+
+/* ---------- offer ---------- */
+.offer { background: var(--brand-deep); color: #fff; padding: var(--s8) 0; }
+.offer a { color: #fff; }
+.offer-grid { display: grid; gap: var(--s6); }
+.price { display: grid; gap: var(--s2); align-content: start; }
+.price-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s2) var(--s3); }
+.price-big { font-size: clamp(56px, 16vw, 88px); line-height: 1; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.price-unit { font-size: 22px; font-weight: 500; }
+.price .free { font-size: 26px; line-height: 1.25; color: #fff; max-width: 24rem; letter-spacing: 0; }
+.incl { display: grid; gap: var(--s5); align-content: start; }
+.incl h3 { font-size: 22px; }
+.ticks { list-style: none; padding: 0; display: grid; gap: var(--s3); }
+.ticks li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--s3); align-items: start; }
+.ticks svg { width: 28px; height: 28px; margin-top: 0; }
+.offer .btn-row { margin-top: var(--s2); }
+.offer .more { color: var(--brand-soft); max-width: 34rem; }
+
+/* ---------- footer ---------- */
+.foot { background: var(--ink); color: #fff; padding: var(--s6) 0 calc(var(--s6) + env(safe-area-inset-bottom, 0px)); font-size: 16px; }
+.foot .wrap { display: grid; gap: var(--s3); }
+.foot p { max-width: 60ch; }
+.foot .by { font-weight: 700; }
+
+@media (min-width: 640px) {
+  .dl thead { display: table-header-group; }
+  .dl thead th { font-size: 14px; font-weight: 500; color: var(--muted); border-bottom: 2px solid var(--ink); padding: var(--s3) var(--s4); }
+  .dl tr { display: table-row; padding: 0; border-bottom: 0; }
+  .dl tbody th, .dl td { display: table-cell; padding: var(--s4); border-bottom: 1px solid var(--rule); }
+  .dl td[data-label]::before { display: none; }
+  .dl tbody th { width: 24%; }
+  .p1-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+}
+@media (min-width: 960px) {
+  .hero-top { flex-wrap: nowrap; }
+  .mark { font-size: 34px; padding: var(--s5) 0 var(--s4); }
+  .hero-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s7); padding-top: var(--s7); padding-bottom: 148px; align-items: start; }
+  .skyline { height: 118px; }
+  .screens { padding-top: var(--s9); }
+  .proof { margin-bottom: var(--s9); }
+  .proof.p1 { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s7); }
+  .proof.p2 { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s7); align-items: start; }
+  .proof.p2 .phones { grid-column: 1; grid-row: 1; max-width: 640px; }
+  .proof.p2 .proof-text { grid-column: 2; grid-row: 1; position: sticky; top: var(--s5); }
+  .proof.p3 { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s7); }
+  .proof.p3 .proof-text { max-width: 28rem; }
+  .band-tint { padding: var(--s8) 0; margin-bottom: var(--s9); }
+  .setup { padding-bottom: var(--s9); }
+  .setup-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s7); }
+  .offer { padding: var(--s9) 0; }
+  .offer-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--s8); }
+}
+@media (min-width: 1200px) {
+  .p1-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+
+<header class="hero on-brand">
+  <div class="wrap hero-top">
+    <a class="mark" href="#top" aria-label="Case Tracker, back to the top">Case Tracker <small>for small landlords</small></a>
+    <nav class="nav" aria-label="On this page">
+      <a href="#screens">Screens</a>
+      <a href="#deadlines">Deadlines</a>
+      <a href="#offer">Pilot</a>
+    </nav>
+  </div>
+  <div class="wrap hero-body" id="top">
+    <div class="hero-text">
+      <h1>Repairs, complaints and damp-and-mould deadlines, tracked for you.</h1>
+      <p class="lede">For housing associations, co-ops and almshouses with fewer than 1,000 homes. Every case runs against a deadline, and the right person gets an email when it is missed.</p>
+      <p class="honest">The demo on this page tracks repairs. Complaint and damp-and-mould deadlines are set up for you in the pilot.</p>
+      <div class="btn-row">
+        <a class="btn btn-light" href="mailto:gerikotori998@gmail.com?subject=Case%20Tracker%2060-day%20pilot">Ask for the 60-day pilot</a>
+        <a class="btn btn-line" href="#screens">See the screens</a>
+      </div>
+    </div>
+    <figure class="shot">
+      <a class="shot-frame" href="img/estate-dashboard-1280.png" aria-label="Open the dashboard screen at full size">
+        <img src="img/estate-dashboard-1280.png" width="1280" height="1118" fetchpriority="high" alt="Case list for the heating and plumbing team at Copperwell Living. Counts show 2 open, 0 due soon, 1 overdue and 1 escalated. The table lists two leak cases, one marked escalated.">
+      </a>
+      <figcaption>Demo screen: the heating and plumbing team's cases at Copperwell Living. One case is overdue and has been escalated.</figcaption>
+    </figure>
+  </div>
+  <svg class="skyline" viewBox="0 0 1440 110" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><g fill="var(--brand-mid)"><rect x="-30" y="19" width="92" height="91"/><rect x="73" y="22" width="92" height="88"/><rect x="172" y="22" width="75" height="88"/><rect x="260" y="48" width="75" height="62"/><rect x="341" y="20" width="69" height="90"/><rect x="424" y="29" width="66" height="81"/><rect x="504" y="54" width="74" height="56"/><rect x="583" y="52" width="67" height="58"/><rect x="623" y="42" width="14" height="10"/><rect x="657" y="25" width="65" height="85"/><rect x="696" y="15" width="14" height="10"/><rect x="735" y="21" width="76" height="89"/><rect x="781" y="11" width="14" height="10"/><rect x="819" y="54" width="95" height="56"/><rect x="925" y="28" width="81" height="82"/><rect x="1011" y="34" width="80" height="76"/><rect x="1103" y="53" width="82" height="57"/><rect x="1152" y="43" width="14" height="10"/><rect x="1190" y="48" width="89" height="62"/><rect x="1289" y="53" width="68" height="57"/><rect x="1361" y="41" width="77" height="69"/><rect x="1442" y="30" width="94" height="80"/></g><g fill="var(--ground)"><rect x="-20" y="74" width="106" height="36"/><rect x="102" y="68" width="123" height="42"/><rect x="245" y="67" width="85" height="43"/><rect x="350" y="46" width="80" height="64"/><rect x="453" y="47" width="128" height="63"/><rect x="594" y="69" width="88" height="41"/><rect x="695" y="75" width="80" height="35"/><rect x="799" y="71" width="111" height="39"/><rect x="926" y="60" width="108" height="50"/><rect x="1050" y="52" width="126" height="58"/><rect x="1190" y="56" width="106" height="54"/><rect x="1318" y="64" width="87" height="46"/><rect x="1428" y="76" width="93" height="34"/></g><rect x="-10" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="10" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="30" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="50" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="112" y="76" width="10" height="11" fill="var(--brand-mid)"/><rect x="132" y="76" width="10" height="11" fill="var(--brand-mid)"/><rect x="152" y="76" width="10" height="11" fill="var(--brand-mid)"/><rect x="172" y="76" width="10" height="11" fill="var(--brand-mid)"/><rect x="192" y="76" width="10" height="11" fill="var(--brand-mid)"/><rect x="255" y="75" width="10" height="11" fill="var(--brand-mid)"/><rect x="275" y="75" width="10" height="11" fill="var(--brand-mid)"/><rect x="295" y="75" width="10" height="11" fill="var(--brand-mid)"/><rect x="360" y="54" width="10" height="11" fill="var(--brand-mid)"/><rect x="380" y="54" width="10" height="11" fill="var(--brand-mid)"/><rect x="400" y="54" width="10" height="11" fill="var(--brand-mid)"/><rect x="360" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="380" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="400" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="463" y="55" width="10" height="11" fill="var(--brand-mid)"/><rect x="483" y="55" width="10" height="11" fill="var(--brand-mid)"/><rect x="503" y="55" width="10" height="11" fill="var(--brand-mid)"/><rect x="523" y="55" width="10" height="11" fill="var(--brand-mid)"/><rect x="543" y="55" width="10" height="11" fill="var(--brand-mid)"/><rect x="463" y="73" width="10" height="11" fill="var(--brand-mid)"/><rect x="483" y="73" width="10" height="11" fill="var(--brand-mid)"/><rect x="503" y="73" width="10" height="11" fill="var(--brand-mid)"/><rect x="523" y="73" width="10" height="11" fill="var(--brand-mid)"/><rect x="543" y="73" width="10" height="11" fill="var(--brand-mid)"/><rect x="604" y="77" width="10" height="11" fill="var(--brand-mid)"/><rect x="624" y="77" width="10" height="11" fill="var(--brand-mid)"/><rect x="644" y="77" width="10" height="11" fill="var(--brand-mid)"/><rect x="705" y="83" width="10" height="11" fill="var(--brand-mid)"/><rect x="725" y="83" width="10" height="11" fill="var(--brand-mid)"/><rect x="745" y="83" width="10" height="11" fill="var(--brand-mid)"/><rect x="809" y="79" width="10" height="11" fill="var(--brand-mid)"/><rect x="829" y="79" width="10" height="11" fill="var(--brand-mid)"/><rect x="849" y="79" width="10" height="11" fill="var(--brand-mid)"/><rect x="869" y="79" width="10" height="11" fill="var(--brand-mid)"/><rect x="936" y="68" width="10" height="11" fill="var(--brand-mid)"/><rect x="956" y="68" width="10" height="11" fill="var(--brand-mid)"/><rect x="976" y="68" width="10" height="11" fill="var(--brand-mid)"/><rect x="996" y="68" width="10" height="11" fill="var(--brand-mid)"/><rect x="936" y="86" width="10" height="11" fill="var(--brand-mid)"/><rect x="956" y="86" width="10" height="11" fill="var(--brand-mid)"/><rect x="976" y="86" width="10" height="11" fill="var(--brand-mid)"/><rect x="996" y="86" width="10" height="11" fill="var(--brand-mid)"/><rect x="1060" y="60" width="10" height="11" fill="var(--brand-mid)"/><rect x="1080" y="60" width="10" height="11" fill="var(--brand-mid)"/><rect x="1100" y="60" width="10" height="11" fill="var(--brand-mid)"/><rect x="1120" y="60" width="10" height="11" fill="var(--brand-mid)"/><rect x="1140" y="60" width="10" height="11" fill="var(--brand-mid)"/><rect x="1060" y="78" width="10" height="11" fill="var(--brand-mid)"/><rect x="1080" y="78" width="10" height="11" fill="var(--brand-mid)"/><rect x="1100" y="78" width="10" height="11" fill="var(--brand-mid)"/><rect x="1120" y="78" width="10" height="11" fill="var(--brand-mid)"/><rect x="1140" y="78" width="10" height="11" fill="var(--brand-mid)"/><rect x="1200" y="64" width="10" height="11" fill="var(--brand-mid)"/><rect x="1220" y="64" width="10" height="11" fill="var(--brand-mid)"/><rect x="1240" y="64" width="10" height="11" fill="var(--brand-mid)"/><rect x="1260" y="64" width="10" height="11" fill="var(--brand-mid)"/><rect x="1200" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="1220" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="1240" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="1260" y="82" width="10" height="11" fill="var(--brand-mid)"/><rect x="1328" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="1348" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="1368" y="72" width="10" height="11" fill="var(--brand-mid)"/><rect x="1438" y="84" width="10" height="11" fill="var(--brand-mid)"/><rect x="1458" y="84" width="10" height="11" fill="var(--brand-mid)"/><rect x="1478" y="84" width="10" height="11" fill="var(--brand-mid)"/></svg>
+</header>
+
+<main id="main">
+  <section class="screens" id="screens" aria-labelledby="screens-h">
+    <div class="wrap">
+      <div class="screens-head">
+        <h2 id="screens-h">What the demo does today</h2>
+        <p class="lede">These are real screens from the demo app, which runs repairs. Screens marked council come from the same product set up for a made-up council, Kestrelford Borough Council.</p>
+      </div>
+
+      <article class="proof p1" aria-labelledby="p1-h">
+        <div class="proof-text">
+          <h3 id="p1-h">A clock on every case, and an email when it runs out</h3>
+          <p class="cap">The bar marks 75, 100 and 150 percent of the deadline. At 100 percent the team lead is emailed. At 150 the manager is.</p>
+        </div>
+        <div class="p1-grid">
+          <div class="p1-stack">
+            <figure class="fig">
+              <img src="img/estate-sla-bar.png" width="583" height="306" loading="lazy" alt="SLA panel on a new leak case: on track, 0.0 of 4 working hours used, with marks at 75, 100 and 150 percent.">
+              <figcaption><b>Estate demo.</b> A new urgent repair, on track.</figcaption>
+            </figure>
+            <figure class="fig">
+              <img src="img/council-sla-overdue.png" width="575" height="505" loading="lazy" alt="A red overdue banner and SLA bar: overdue by 0.2 working hours, 40.15 of 40 working hours used, department head emailed.">
+              <figcaption><b>Council demo.</b> The same bar once the deadline has passed.</figcaption>
+            </figure>
+          </div>
+          <figure class="fig">
+            <img src="img/council-escalation-email.png" width="760" height="1045" loading="lazy" alt="Escalation email to a service-desk manager: a pothole case is still open at 150 percent of its deadline, with its reference, place, due time and the bar at 150 percent.">
+            <figcaption><b>Council demo.</b> The second escalation email. It names the place, never the resident.</figcaption>
+          </figure>
+        </div>
+      </article>
+    </div>
+
+    <div class="band-tint">
+      <div class="wrap">
+        <article class="proof p2" aria-labelledby="p2-h">
+          <div class="phones">
+            <figure class="fig">
+              <img src="img/estate-status-top.png" width="750" height="2110" loading="lazy" alt="Public status page on a phone for a fixed leak: a green Fixed banner and a four-step timeline from Received to Fixed.">
+              <figcaption><b>Estate demo.</b> Status page, top.</figcaption>
+            </figure>
+            <figure class="fig">
+              <img src="img/estate-status-bottom.png" width="750" height="2380" loading="lazy" alt="Lower half of the same status page: the repair type and block, an illustrated plan of Harbour Court, the update note, and a line saying the page never shows names, contact details, descriptions or photos.">
+              <figcaption><b>Estate demo.</b> The rest of the page.</figcaption>
+            </figure>
+          </div>
+          <div class="proof-text">
+            <h3 id="p2-h">Residents can check progress, with no personal data on the page</h3>
+            <p class="cap">The public page shows the type of repair, the block, progress and updates. It never shows names, contact details, descriptions or photos.</p>
+            <p class="src">It works from a reference number, so there is no account to set up.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <article class="proof p3" aria-labelledby="p3-h">
+        <div class="proof-text">
+          <h3 id="p3-h">A monthly report on how the deadlines were met</h3>
+          <p class="cap">One page for the month, by team. It is the page to open when someone asks how the month went.</p>
+          <dl class="report-facts">
+            <div><dt>Received</dt> <dd>and resolved in the month</dd></div>
+            <div><dt>Within SLA</dt> <dd>share resolved inside the deadline</dd></div>
+            <div><dt>Median to resolve</dt> <dd>in working hours</dd></div>
+            <div><dt>Overdue at month end</dt> <dd>cases still open past the deadline</dd></div>
+          </dl>
+          <p class="src">Council demo, October 2026 sample report, fictional data.</p>
+        </div>
+        <figure class="fig">
+          <img src="img/council-monthly-report.png" width="1100" height="944" loading="lazy" alt="Top of a monthly report for Kestrelford Borough Council, October 2026: five figures (received, resolved, within SLA, median to resolve, overdue at month end) and bars showing the share resolved within the deadline for five departments.">
+          <figcaption><b>Council demo.</b> Top of the report. The rest is a table by team.</figcaption>
+        </figure>
+      </article>
+    </div>
+  </section>
+
+  <section class="setup" id="deadlines" aria-labelledby="setup-h">
+    <div class="wrap">
+      <div class="setup-grid">
+        <div class="setup-intro">
+          <h2 id="setup-h">Set up for your deadlines</h2>
+          <p class="lede">Your pilot is set up with your case types and deadlines, for example complaint stage 1 answered within 10 working days, or damp and mould investigated within 10 working days.</p>
+          <p class="muted">The demo screens above run repairs. The complaint and damp-and-mould clocks are not in them. The pilot is where we set those up with you.</p>
+          <div class="notice" role="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.2v.1"/></svg>
+            <p><strong>This is not legal advice and makes no compliance claim.</strong> The deadlines in the table are published by the sources named. Check the current wording at the source.</p>
+          </div>
+        </div>
+        <table class="dl">
+          <caption>Published deadlines the pilot can be set up around</caption>
+          <thead>
+            <tr><th scope="col">Case type</th><th scope="col">Deadline</th><th scope="col">Published by</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Complaint, stage 1</th>
+              <td data-label="Deadline" class="dd">Answered within 10 working days<span>Acknowledged within 5 working days</span></td>
+              <td data-label="Published by" class="where">The Housing Ombudsman's Complaint Handling Code</td>
+            </tr>
+            <tr>
+              <th scope="row">Complaint, stage 2</th>
+              <td data-label="Deadline" class="dd">Answered within 20 working days<span>Acknowledged within 5 working days</span></td>
+              <td data-label="Published by" class="where">The Housing Ombudsman's Complaint Handling Code</td>
+            </tr>
+            <tr>
+              <th scope="row">Damp and mould, England</th>
+              <td data-label="Deadline" class="dd">Investigated within 10 working days</td>
+              <td data-label="Published by" class="where">Awaab's Law, in force in England since 27 October 2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="offer on-brand" id="offer" aria-labelledby="offer-h">
+    <div class="wrap offer-grid">
+      <div class="price">
+        <h2 id="offer-h" class="free">A free 60-day pilot, then</h2>
+        <p class="price-line"><span class="price-big">GBP 49</span><span class="price-unit">a month</span></p>
+        <p class="more">For up to 250 homes. Over 250? Write and say how many homes you have.</p>
+      </div>
+      <div class="incl">
+        <h3>What GBP 49 a month covers</h3>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="14" cy="14" r="12"/><path d="M8.5 14.5l3.8 3.8 7.2-8"/></svg><span>Repairs and complaints, each case with its own deadline. Complaint case types are set up with you in the pilot.</span></li>
+          <li><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="14" cy="14" r="12"/><path d="M8.5 14.5l3.8 3.8 7.2-8"/></svg><span>Email to the team lead and then the manager when a deadline passes</span></li>
+          <li><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="14" cy="14" r="12"/><path d="M8.5 14.5l3.8 3.8 7.2-8"/></svg><span>A monthly report</span></li>
+          <li><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="14" cy="14" r="12"/><path d="M8.5 14.5l3.8 3.8 7.2-8"/></svg><span>A set-up of your case types and deadlines in the pilot</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-light" href="mailto:gerikotori998@gmail.com?subject=Case%20Tracker%2060-day%20pilot">Ask for the 60-day pilot</a>
+        </div>
+        <p class="more small">This opens an email to Geri Kotori, who builds Case Tracker.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Demo with fictional data. Copperwell Living is a made-up landlord.</p>
+    <p class="small" style="color:#D9D5CC">Kestrelford Borough Council, in the screens marked council, is a made-up council.</p>
+    <p class="by">Built by Geri Kotori</p>
+  </div>
+</footer>
+</body>
+</html>
